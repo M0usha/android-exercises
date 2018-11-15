@@ -2,6 +2,10 @@ package fr.android.androidexercises
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.widget.LinearLayout
+import android.widget.ListView
 
 import java.util.ArrayList
 import java.util.Locale
@@ -20,6 +24,15 @@ class LibraryActivity : AppCompatActivity() {
         val books = books
 
         // TODO findViewById() and setAdapter()
+
+        //val bookListView = findViewById<ListView>(R.id.bookListView)
+        //bookListView.adapter = BookAdapter(this, books)
+        //Execute ???
+
+        val list = findViewById<RecyclerView>(R.id.bookListView)
+        list.layoutManager = LinearLayoutManager(this)
+        list.adapter = RecyclerAdapter(this,books)
+
     }
 
     private val books: List<Book>
