@@ -12,7 +12,8 @@ android {
         versionCode 1
         versionName "1.0"
 
-        // TODO add testInstrumentationRunner
+        // TODO add testInstrumentationRunner$
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -30,7 +31,7 @@ android {
 }
 
 dependencies {
-    testImplementation 'junit:junit:4.12'
+    testImplementation ('junit:junit:4.12', 'io.mockk:mockk:1.8.12','org.amshove.kluent:kluent-android:1.42','org.robolectric:robolectric:4.0.2')
     implementation(
             "com.android.support:appcompat-v7:$support_version",
             "com.android.support:design:$support_version",
@@ -41,4 +42,9 @@ dependencies {
     // TODO AssertJ + AssertJ Android
 
     // TODO Espresso
+
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    androidTestImplementation 'androidx.test:runner:1.1.0'
+    androidTestImplementation 'androidx.test:rules:1.1.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.0.0'
 }
