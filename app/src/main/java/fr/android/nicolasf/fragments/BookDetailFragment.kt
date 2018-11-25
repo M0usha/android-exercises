@@ -14,15 +14,11 @@ import fr.android.nicolasf.R
 import fr.android.nicolasf.book.Book
 import org.w3c.dom.Text
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 class BookDetailFragment : Fragment() {
-    // TODO Override onCreateViewMethod
 
     private var book: Book? = null
     private var orientationLandscape: Boolean = false
-    //private var listener: OnInteractionListener? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,15 +42,11 @@ class BookDetailFragment : Fragment() {
             var textSynopsis = ""
             book!!.synopsis.forEach {
                 textSynopsis += it
+                textSynopsis += "\n"
             }
             synopsisDetailTextView.text = textSynopsis
-        }else{
-            Log.v("bookIsNull", "is book null => "+(book == null))
         }
 
-        if(resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE){
-            synopsisDetailTextView.setEms(14)
-        }
 
         return view
     }

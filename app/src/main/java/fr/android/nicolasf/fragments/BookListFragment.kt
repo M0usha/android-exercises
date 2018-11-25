@@ -22,17 +22,10 @@ import java.lang.Exception
 
 class BookListFragment : Fragment() {
 
-    companion object {
-        private val STEP_0 = "This is step 0"
-    }
-
-    //private var textView: TextView? = null
-    private var listBookView: RecyclerView? = null
     private var listener: OnBookPressedListener? = null
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        // TODO cast context to listener
         when(context){
             is OnBookPressedListener -> listener = context
             else -> throw Exception("pas le bon uesh")
@@ -47,11 +40,6 @@ class BookListFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_booklist, container, false)
 
-        // TODO find TextView and set text
-        // textView = view.findViewById(R.id.textView)
-        //listBookView = view.findViewById(R.id.bookListView)
-
-        // on récupère la liste des livres
 
         val retrofit = Retrofit.Builder().baseUrl("http://henri-potier.xebia.fr/").addConverterFactory(GsonConverterFactory.create()).build()
 
@@ -59,17 +47,17 @@ class BookListFragment : Fragment() {
 
         val api = retrofit.create(HenriPotierService::class.java)
 
-        // TODO listBooks()
         var listBooks: Array<Book>? = null
 
         val books = api.listBooks()
+
+        val currentContext = context
 
         // TODO enqueue call and display book title
 
         books.enqueue(object : Callback<Array<Book>> {
 
             override fun onFailure(call: Call<Array<Book>>, t: Throwable) {
-                //Timber.i(t)
                 Log.e("on failure enqueue", t.toString())
             }
 
@@ -79,7 +67,7 @@ class BookListFragment : Fragment() {
                 listBooks = response.body()
                 val myRecyclerView = view!!.findViewById<RecyclerView>(R.id.bookListView)
                 myRecyclerView.layoutManager = LinearLayoutManager(this@BookListFragment.context)
-                myRecyclerView.adapter = RecyclerAdapter(this@BookListFragment.context,listBooks, {e -> onPressedBook(e)})
+                myRecyclerView.adapter = RecyclerAdapter(currentContext!!,listBooks!!, {e -> onPressedBook(e)})
 
 
             }
@@ -94,7 +82,6 @@ class BookListFragment : Fragment() {
 
 
     interface OnBookPressedListener {
-        // TODO add onNext() method
         fun onBookSelect(b: Book)
     }
 

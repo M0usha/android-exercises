@@ -27,17 +27,17 @@ class LibraryActivity : AppCompatActivity(), BookListFragment.OnBookPressedListe
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_library)
 
-        supportFragmentManager.beginTransaction().replace(R.id.fragListBook, BookListFragment(), BookListFragment::class.java.name).addToBackStack("bookListFrag").commit()
+        supportFragmentManager.beginTransaction().replace(R.id.fragListBook, BookListFragment(), BookListFragment::class.java.name)
+                .addToBackStack("bookListFrag")
+                .commit()
 
 
 
-
-        // TODO replace BookListFragment in containerFrameLayout
         if(resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            /*if(supportFragmentManager.findFragmentByTag("bookDetailFrag") != null){
 
-            }*/
-            supportFragmentManager.beginTransaction().replace(R.id.fragDetailBook, BookDetailFragment(), BookDetailFragment::class.java.name).addToBackStack("bookDetailFrag").commit()
+            supportFragmentManager.beginTransaction().replace(R.id.fragDetailBook, BookDetailFragment(), BookDetailFragment::class.java.name)
+                    .addToBackStack("bookDetailFrag")
+                    .commit()
         }else{
             supportFragmentManager.popBackStack("bookDetailFrag",FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
@@ -48,14 +48,14 @@ class LibraryActivity : AppCompatActivity(), BookListFragment.OnBookPressedListe
 
 
     override fun onBookSelect(b: Book) {
-        Log.v("onBookSelect", "book title ==>"+b.title)
 
         val nextFrag = BookDetailFragment.newInstance(b, resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
         actualBookDetailFrag = nextFrag
         if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
             supportFragmentManager.popBackStack("bookListFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
-        supportFragmentManager.beginTransaction().replace(R.id.fragDetailBook, nextFrag, BookDetailFragment::class.java.name).addToBackStack("bookDetailFrag")
+        supportFragmentManager.beginTransaction().replace(R.id.fragDetailBook, nextFrag, BookDetailFragment::class.java.name)
+                .addToBackStack("bookDetailFrag")
                 .commit()
     }
 
@@ -74,6 +74,15 @@ class LibraryActivity : AppCompatActivity(), BookListFragment.OnBookPressedListe
             supportFragmentManager.beginTransaction().replace(R.id.fragDetailBook, fragment, BookDetailFragment::class.java.name).addToBackStack("bookDetailFrag").commit()
         }
 
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        supportFragmentManager.popBackStack()
+        supportFragmentManager.beginTransaction()
+                .replace(R.id.fragListBook, BookListFragment(), BookListFragment::class.java.name)
+                .addToBackStack("bookListFrag")
+                .commit()
     }
 
 

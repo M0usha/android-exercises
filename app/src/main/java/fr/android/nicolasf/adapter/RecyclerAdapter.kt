@@ -24,6 +24,7 @@ class RecyclerAdapter(context: Context?, val books: Array<Book>?, val onBookPres
         val titleView = p0.itemView.findViewById<TextView>(R.id.nameTextView)
         val coverView = p0.itemView.findViewById<ImageView>(R.id.coverImageView)
 
+
         titleView.text = books!![position].title
         Picasso.get().load(books!![position].cover).into(coverView)
 
