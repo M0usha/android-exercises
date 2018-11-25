@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="fr.android.androidexercises">
+    package="fr.android.nicolasf">
 
     <application
         android:allowBackup="true"
@@ -10,7 +10,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity
-            android:name=".LibraryActivity"
+            android:name="fr.android.nicolasf.LibraryActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme">
             <intent-filter>

@@ -1,4 +1,4 @@
-package fr.android.androidexercises
+package fr.android.nicolasf
 
 import android.content.res.Configuration
 import android.os.Bundle
@@ -30,10 +30,6 @@ class LibraryActivity : AppCompatActivity(), Step0Fragment.OnNextStep0Listener {
 
     }
 
-
-    override fun onBackPressed() {
-        supportFragmentManager.popBackStack()
-    }
 
 
 

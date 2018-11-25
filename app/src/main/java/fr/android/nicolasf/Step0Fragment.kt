@@ -1,4 +1,4 @@
-package fr.android.androidexercises
+package fr.android.nicolasf
 
 import android.content.Context
 import android.os.Bundle
