@@ -2,8 +2,14 @@ package fr.android.nicolasf
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.os.PersistableBundle
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
+import fr.android.nicolasf.adapter.RecyclerAdapter
 import fr.android.nicolasf.book.Book
 import fr.android.nicolasf.fragments.BookListFragment
 import fr.android.nicolasf.fragments.BookDetailFragment
@@ -13,51 +19,27 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class LibraryActivity : AppCompatActivity(), BookListFragment.OnNextStep0Listener {
+class LibraryActivity : AppCompatActivity(), BookListFragment.OnBookPressedListener {
 
+    private var actualBookDetailFrag: Fragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_library)
 
-
-        // on récupère la liste des livres
-
-        val retrofit = Retrofit.Builder().baseUrl("http://henri-potier.xebia.fr/").addConverterFactory(GsonConverterFactory.create()).build()
-
-        // TODO create a service
-
-        val api = retrofit.create(HenriPotierService::class.java)
-
-        // TODO listBooks()
-
-        val books = api.listBooks()
-
-        // TODO enqueue call and display book title
-
-        books.enqueue(object : Callback<Array<Book>> {
-
-            override fun onFailure(call: Call<Array<Book>>, t: Throwable) {
-                //Timber.i(t)
-                Log.e("on failure enqueue", t.toString())
-            }
-
-            override fun onResponse(call: Call<Array<Book>>,
-                                    response: Response<Array<Book>>) {
-
-                response.body()?.forEach {
-                    //Timber.i(it.title +"   "+  it.price)
-                }
-                //Timber.i(response.body()?.asList().toString())
-
-            }
-        })
+        supportFragmentManager.beginTransaction().replace(R.id.fragListBook, BookListFragment(), BookListFragment::class.java.name).addToBackStack("bookListFrag").commit()
 
 
-        supportFragmentManager.beginTransaction().replace(R.id.containerFrameLayout, BookListFragment(), BookListFragment::class.java.name).commit()
+
+
         // TODO replace BookListFragment in containerFrameLayout
         if(resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            supportFragmentManager.beginTransaction().replace(R.id.containerFrameLayout2, BookDetailFragment(), BookDetailFragment::class.java.name).commit()
+            /*if(supportFragmentManager.findFragmentByTag("bookDetailFrag") != null){
+
+            }*/
+            supportFragmentManager.beginTransaction().replace(R.id.fragDetailBook, BookDetailFragment(), BookDetailFragment::class.java.name).addToBackStack("bookDetailFrag").commit()
+        }else{
+            supportFragmentManager.popBackStack("bookDetailFrag",FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
 
 
@@ -65,13 +47,34 @@ class LibraryActivity : AppCompatActivity(), BookListFragment.OnNextStep0Listene
     }
 
 
-    override fun onNext() {
-        // TODO implement onNext() from BookListFragment.OnNextStep0Listener
+    override fun onBookSelect(b: Book) {
+        Log.v("onBookSelect", "book title ==>"+b.title)
 
-        supportFragmentManager.beginTransaction().replace(R.id.containerFrameLayout, BookDetailFragment(), BookDetailFragment::class.java.name).addToBackStack(BookListFragment::class.java.name).commit()
-
+        val nextFrag = BookDetailFragment.newInstance(b, resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE)
+        actualBookDetailFrag = nextFrag
+        if(resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT){
+            supportFragmentManager.popBackStack("bookListFrag", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        }
+        supportFragmentManager.beginTransaction().replace(R.id.fragDetailBook, nextFrag, BookDetailFragment::class.java.name).addToBackStack("bookDetailFrag")
+                .commit()
     }
 
+
+    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        if(actualBookDetailFrag != null){
+            supportFragmentManager.putFragment(outState!!,"savedDetailFrag", actualBookDetailFrag!!)
+        }
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        val fragment = supportFragmentManager.getFragment(savedInstanceState!!, "savedDetailFrag")
+        if(fragment != null){
+            supportFragmentManager.beginTransaction().replace(R.id.fragDetailBook, fragment, BookDetailFragment::class.java.name).addToBackStack("bookDetailFrag").commit()
+        }
+
+    }
 
 
 

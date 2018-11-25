@@ -6,7 +6,7 @@ android {
     buildToolsVersion "28.0.3"
 
     defaultConfig {
-        applicationId "fr.android.androidexercises"
+        applicationId "fr.android.nicolasf"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
@@ -28,5 +28,7 @@ dependencies {
             "com.android.support:design:$support_version",
             "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version",
             "com.squareup.retrofit2:retrofit:2.4.0",
-            "com.squareup.retrofit2:converter-gson:2.4.0")
+            "com.squareup.retrofit2:converter-gson:2.4.0",
+            "com.android.support.constraint:constraint-layout:1.0.2",
+            'com.squareup.picasso:picasso:2.71828')
 }
